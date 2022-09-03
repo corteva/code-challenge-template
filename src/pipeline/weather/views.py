@@ -9,12 +9,12 @@ from weather.serializers import WeatherDataSerializer, StatisticsSerializer
 class WeatherListView(ListAPIView):
     queryset = WeatherData.objects.all()
     serializer_class = WeatherDataSerializer
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = WeatherFilter
 
 
 class StatisticsListView(ListAPIView):
     queryset = Statistics.objects.all()
     serializer_class = StatisticsSerializer
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = StatisticsFilter

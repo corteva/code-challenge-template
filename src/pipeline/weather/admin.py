@@ -23,5 +23,3 @@ class StatisticsAdmin(ModelAdmin):
         "avg_min_temp",
         "total_precipitation",
     )
-
-
