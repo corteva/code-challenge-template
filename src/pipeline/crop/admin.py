@@ -1,5 +1,8 @@
-from django.contrib import admin
+from django.contrib.admin import register, ModelAdmin
 
 from crop.models import CropData
 
-admin.site.register(CropData)
+
+@register(CropData)
+class CropDataAdmin(ModelAdmin):
+    list_display = ("year", "corn_yield")
