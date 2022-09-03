@@ -11,7 +11,13 @@ class WeatherData(BaseModel):
     precipitation = models.DecimalField(max_digits=4, decimal_places=1)
 
     class Meta:
-        unique_together = ['station_id', 'date', 'max_temp', 'min_temp', 'precipitation']
+        unique_together = [
+            "station_id",
+            "date",
+            "max_temp",
+            "min_temp",
+            "precipitation",
+        ]
 
 
 class Statistics(BaseModel):

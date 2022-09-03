@@ -7,4 +7,3 @@ from crop.serializers import CropSerializer
 class CropListView(ListAPIView):
     queryset = CropData.objects.all()
     serializer_class = CropSerializer
-

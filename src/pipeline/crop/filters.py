@@ -4,8 +4,8 @@ from crop.models import CropData
 
 
 class CropFilter(FilterSet):
-    year = CharFilter(lookup_expr='iexact')  # todo: Number filter?
+    year = CharFilter(lookup_expr="iexact")  # todo: Number filter?
 
     class Meta:
         model = CropData
-        fields = ['year']
+        fields = ["year"]

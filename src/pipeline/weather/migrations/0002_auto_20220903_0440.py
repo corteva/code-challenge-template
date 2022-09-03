@@ -6,22 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('weather', '0001_initial'),
+        ("weather", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Statistics',
+            name="Statistics",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('year', models.PositiveSmallIntegerField()),
-                ('avg_max_temp', models.FloatField(null=True)),
-                ('avg_min_temp', models.FloatField(null=True)),
-                ('total_precipitation', models.FloatField(null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("year", models.PositiveSmallIntegerField()),
+                ("avg_max_temp", models.FloatField(null=True)),
+                ("avg_min_temp", models.FloatField(null=True)),
+                ("total_precipitation", models.FloatField(null=True)),
             ],
         ),
         migrations.AlterUniqueTogether(
-            name='weatherdata',
-            unique_together={('date', 'max_temp', 'min_temp', 'precipitation')},
+            name="weatherdata",
+            unique_together={("date", "max_temp", "min_temp", "precipitation")},
         ),
     ]
