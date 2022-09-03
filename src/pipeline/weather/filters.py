@@ -1,4 +1,4 @@
-from django_filters import FilterSet, CharFilter, DateFilter
+from django_filters.rest_framework import FilterSet, CharFilter, DateFilter
 
 from weather.models import WeatherData, Statistics
 
@@ -8,17 +8,17 @@ from weather.models import WeatherData, Statistics
 
 
 class WeatherFilter(FilterSet):
-    date = DateFilter
-    station_id = CharFilter(lookup_expr="iexact")
+    date = DateFilter(field_name="date", lookup_expr="iexact")
+    station_id = CharFilter(field_name="station_id", lookup_expr="iexact")
 
     class Meta:
         model = WeatherData
-        fields = ["year", "station_id"]
+        fields = ["date", "station_id"]
 
 
 class StatisticsFilter(FilterSet):
-    year = CharFilter(lookup_expr="iexact")
-    station_id = CharFilter(lookup_expr="iexact")
+    year = CharFilter(field_name="year", lookup_expr="iexact")
+    station_id = CharFilter(field_name="station_id", lookup_expr="iexact")
 
     class Meta:
         model = Statistics
