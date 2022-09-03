@@ -15,7 +15,7 @@ def generate_years_list():
     return years
 
 
-def calculate_stats(years: list):
+def calculate_stats(years: list) -> None:
     # todo: note about freq of loads and analysis then maybe less DB queries
     missing_val = -9999
     usable_max_data = WeatherData.objects.exclude(max_temp=missing_val)
