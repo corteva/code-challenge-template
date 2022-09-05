@@ -1,6 +1,6 @@
 from django.db import models
 
-from common.models import BaseModel
+from core.models import BaseModel
 
 
 class WeatherData(BaseModel):

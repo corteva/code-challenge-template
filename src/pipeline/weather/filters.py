@@ -3,7 +3,7 @@ from django_filters.rest_framework import FilterSet, CharFilter, DateFilter
 from weather.models import WeatherData, Statistics
 
 
-# todo: which filters can be moved to common or outside of class
+# todo: which filters can be moved to core or outside of class
 # todo: reevaluate types of filters and if all should be done in Meta.fields
 
 

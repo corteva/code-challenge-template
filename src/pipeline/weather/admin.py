@@ -1,5 +1,7 @@
 from django.contrib.admin import register, ModelAdmin
 
+from core.admin import NoObjNeededMixin
+
 from weather.models import WeatherData, Statistics
 from weather.services import generate_years_list, calculate_stats
 
