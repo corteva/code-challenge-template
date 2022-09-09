@@ -32,42 +32,58 @@ class Command(BaseCommand):
             path = path.format("yld_data")
             self._read_txt_files(path, YIELD)
         else:
+            WeatherData.objects.all().delete()
             self.stdout.write(self.style.ERROR(f"Failed start data ingestion. Please specify -w/--weather or -y/--yield after 'import_data' in the command."))
         return
     
     def _read_txt_files(self, path: str, data_type: str) -> None:
+        success_count = 0
+        failed_count = 0
         files = os.listdir(path)
         for file in files:
             if file.endswith(".txt"):
+                file_name = file[:-4]
                 file_path = path + file
                 with open(file_path, "r") as f:
-                    lines = f.readlines()
+                    lines = f.readlines()  # not necessary anymore in python
                     for line in lines:
                         data = line.split()
                         try:
-                            self._create_record(data_type, data)
-                        except IntegrityError as ex:
-                            pass
-                            # print(ex)
-                    f.close()
+                            self._create_record(file_name, data_type, data)
+                            success_count += 1
+                            if success_count % 50000 == 0:
+                                self.stdout.write(self.style.SUCCESS(success_count))
 
-    def _create_record(self, data_type: str, data: list) -> None:
+                        except Exception as ex:
+                            failed_count += 1
+                            if failed_count % 100 == 0:
+                                self.stdout.write(self.style.ERROR(failed_count))
+                    f.close()
+        end_time = datetime.now()
+        self.stdout.write(self.style.SUCCESS(
+            f"Finished ingestion of data at {end_time}. success_count = {success_count}   failed_count = {failed_count}"))
+
+    def _create_record(self, file_name: str, data_type: str, data: list) -> None:
         if data_type == YIELD:
             CropData.objects.create(year=data[0], corn_yield=data[1])
         elif data_type == WEATHER:
-            station_id = random.randint(1, 5) # todo: what is id???
-            date = self_format_date(data[0])
-            max_temp = self._shift_decimal(data[1], -1)
-            min_temp = self._shift_decimal(data[2], -1)
-            precipitation = self._shift_decimal(data[3], -1)
+            station_id = file_name
+            date = self._format_date(data[0])
+            max_temp = self._shift_decimal(float(data[1]), -1)
+            min_temp = self._shift_decimal(float(data[2]), -1)
+            precipitation = self._shift_decimal(float(data[3]), -1)
             WeatherData.objects.create(station_id=station_id, date=date, max_temp=max_temp, min_temp=min_temp, precipitation=precipitation)
 
     def _format_date(self, date: str) -> str:
-        pass
-    def _shift_decimal(self, num: int, shift: int) -> int:
-        if num == -9999:
+        year = date[:4]
+        month = date[4:6]
+        day = date[6:]
+        formatted_date = f"{year}-{month}-{day}"
+        return formatted_date
+    def _shift_decimal(self, num: float, shift: int) -> float:
+        if num == -9999.0:
             return num
-        shifted_num = num * 10**shift
+        shifted_num = num * 10.0**shift
         return shifted_num
 
 

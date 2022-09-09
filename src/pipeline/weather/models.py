@@ -6,9 +6,9 @@ from core.models import BaseModel
 class WeatherData(BaseModel):
     station_id = models.CharField(max_length=50)
     date = models.DateField()
-    max_temp = models.DecimalField(max_digits=4, decimal_places=1)
-    min_temp = models.DecimalField(max_digits=4, decimal_places=1)
-    precipitation = models.DecimalField(max_digits=4, decimal_places=1)
+    max_temp = models.FloatField()
+    min_temp = models.FloatField()
+    precipitation = models.FloatField()
 
     class Meta:
         unique_together = [
