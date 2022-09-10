@@ -1,5 +1,5 @@
 import os
-import random # todo: remove
+import pandas as pd
 from datetime import datetime
 
 from django.db import IntegrityError
@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 
 from crop.models import CropData
 from weather.models import WeatherData
+from weather.serializers import WeatherDataSerializer
 
 WEATHER = "weather"
 YIELD = "yield"
@@ -35,30 +36,50 @@ class Command(BaseCommand):
             WeatherData.objects.all().delete()
             self.stdout.write(self.style.ERROR(f"Failed start data ingestion. Please specify -w/--weather or -y/--yield after 'import_data' in the command."))
         return
-    
+
     def _read_txt_files(self, path: str, data_type: str) -> None:
         success_count = 0
         failed_count = 0
         files = os.listdir(path)
         for file in files:
+            print(datetime.now())
             if file.endswith(".txt"):
                 file_name = file[:-4]
                 file_path = path + file
-                with open(file_path, "r") as f:
-                    lines = f.readlines()  # not necessary anymore in python
-                    for line in lines:
-                        data = line.split()
-                        try:
-                            self._create_record(file_name, data_type, data)
-                            success_count += 1
-                            if success_count % 50000 == 0:
-                                self.stdout.write(self.style.SUCCESS(success_count))
+                print(datetime.now())
+                df = pd.read_table(file_path, header=None, names=["date", "max_temp", "min_temp", "precipitation"])
+                print(datetime.now())
+                df["station_id"] = file_name
+                df["date"] = df["date"].apply(self._format_date)
+                print(datetime.now())
+                records = df.to_dict('records')
+                objs = [WeatherData(**record) for record in records]
+                print(datetime.now())
+                WeatherData.objects.bulk_create(objs)
+                print(datetime.now())
 
-                        except Exception as ex:
-                            failed_count += 1
-                            if failed_count % 100 == 0:
-                                self.stdout.write(self.style.ERROR(failed_count))
-                    f.close()
+                # serialized_data = WeatherDataSerializer(data=records, many=True)
+                # print(datetime.now())
+                # serialized_data.is_valid(raise_exception=True)
+                # print(datetime.now())
+                # serialized_data.save()
+                print(WeatherData.objects.all().count())
+
+                # with open(file_path, "r") as f:
+                #     lines = f.readlines()  # not necessary anymore in python
+                #     for line in lines:
+                #         data = line.split()
+                #         try:
+                #             self._create_record(file_name, data_type, data)
+                #             success_count += 1
+                #             if success_count % 50000 == 0:
+                #                 self.stdout.write(self.style.SUCCESS(success_count))
+                #
+                #         except Exception as ex:
+                #             failed_count += 1
+                #             if failed_count % 100 == 0:
+                #                 self.stdout.write(self.style.ERROR(failed_count))
+                #     f.close()
         end_time = datetime.now()
         self.stdout.write(self.style.SUCCESS(
             f"Finished ingestion of data at {end_time}. success_count = {success_count}   failed_count = {failed_count}"))
@@ -75,6 +96,7 @@ class Command(BaseCommand):
             WeatherData.objects.create(station_id=station_id, date=date, max_temp=max_temp, min_temp=min_temp, precipitation=precipitation)
 
     def _format_date(self, date: str) -> str:
+        date = str(date)
         year = date[:4]
         month = date[4:6]
         day = date[6:]
