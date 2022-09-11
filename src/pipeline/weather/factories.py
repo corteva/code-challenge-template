@@ -12,9 +12,9 @@ class WeatherDataFactory(DjangoModelFactory):
 
     station_id = Sequence(lambda n: n)
     date = FuzzyDate(date.fromisoformat("1950-01-01"))
-    max_temp = FuzzyFloat(low=0)
-    min_temp = FuzzyFloat(low=0)
-    precipitation = FuzzyFloat(low=0)
+    max_temp = FuzzyFloat(low=16, high=32)
+    min_temp = FuzzyFloat(low=0, high=16)
+    precipitation = FuzzyFloat(low=0, high=12)
 
 
 class StatisticsFactory(DjangoModelFactory):
