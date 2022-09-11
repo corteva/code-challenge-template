@@ -13,7 +13,7 @@ class WeatherViewTests(APITestCase):
         url = reverse("weather_list")
         response = self.client.get(url, format="json")
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == batch_size
+        assert len(response.data['results']) == batch_size
 
     def test_statistics_list(self):
         batch_size = 10
@@ -21,4 +21,4 @@ class WeatherViewTests(APITestCase):
         url = reverse("stats_list")
         response = self.client.get(url, format="json")
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == batch_size
+        assert len(response.data['results']) == batch_size
