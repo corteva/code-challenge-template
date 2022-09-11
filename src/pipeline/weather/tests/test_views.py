@@ -7,9 +7,6 @@ from weather.factories import WeatherDataFactory, StatisticsFactory
 
 
 class WeatherViewTests(APITestCase):
-    def setUp(self):
-        django.setup()
-
     def test_weather_list(self):
         batch_size = 10
         WeatherDataFactory.create_batch(batch_size)
