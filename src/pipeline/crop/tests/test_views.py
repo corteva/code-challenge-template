@@ -13,5 +13,5 @@ class YieldViewTests(APITestCase):
         CropDataFactory.create_batch(batch_size)
         url = reverse("crop_list")
         response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), batch_size)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == batch_size
