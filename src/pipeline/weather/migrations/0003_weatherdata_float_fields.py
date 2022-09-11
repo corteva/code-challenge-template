@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("weather", "0002_auto_20220905_1937"),
+        ("weather", "0002_add_timestamp_fields"),
     ]
 
     operations = [
