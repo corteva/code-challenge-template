@@ -42,7 +42,7 @@ def _calculate_avg_max_temp(usable_max_data, station_id, year):
     try:
         filtered_data = usable_max_data.filter(station_id=station_id, date__year=year)
         avg_max_temp = filtered_data.aggregate(Avg("max_temp"))
-        return avg_max_temp['max_temp__avg']
+        return avg_max_temp["max_temp__avg"]
     except Exception as ex:
         return None
 
@@ -51,15 +51,17 @@ def _calculate_avg_min_temp(usable_min_data, station_id, year):
     try:
         filtered_data = usable_min_data.filter(station_id=station_id, date__year=year)
         avg_min_temp = filtered_data.aggregate(Avg("min_temp"))
-        return avg_min_temp['min_temp__avg']
+        return avg_min_temp["min_temp__avg"]
     except Exception as ex:
         return None
 
 
 def _calculate_total_precip(usable_precip_data, station_id, year):
     try:
-        filtered_data = usable_precip_data.filter(station_id=station_id, date__year=year)
+        filtered_data = usable_precip_data.filter(
+            station_id=station_id, date__year=year
+        )
         total_precipitation = filtered_data.aggregate(Sum("precipitation"))
-        return total_precipitation['precipitation__sum']
+        return total_precipitation["precipitation__sum"]
     except Exception:
         return None

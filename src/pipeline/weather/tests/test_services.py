@@ -7,10 +7,12 @@ from weather.factories import WeatherDataFactory
 from weather.models import Statistics
 from weather.services import generate_years_list, calculate_stats
 
+
 @pytest.mark.django_db
 class TestWeatherServices:
-
-    @pytest.mark.parametrize("start_year, end_year", ((1985, 1985), (1985, 1986), (1985, 2014)))
+    @pytest.mark.parametrize(
+        "start_year, end_year", ((1985, 1985), (1985, 1986), (1985, 2014))
+    )
     def test_generate_years_list(self, start_year, end_year):
         start_date = f"{start_year}-01-01"
         end_date = f"{end_year}-12-31"
@@ -25,7 +27,7 @@ class TestWeatherServices:
         assert returned_years[expected_num_years - 1] == end_year
         for i in range(expected_num_years - 1):
             assert returned_years[i] + 1 == returned_years[i + 1]
-            
+
     def test_calculate_stats(self):
         batch_size = 5
         year_1 = 1999
@@ -50,23 +52,46 @@ class TestWeatherServices:
                 for i in range(1, batch_size + 1):
                     date_str = f"{year}-01-0{i}"
                     print(date_str)
-                    data = WeatherDataFactory.create(station_id=station_id, date=date.fromisoformat(date_str))
+                    data = WeatherDataFactory.create(
+                        station_id=station_id, date=date.fromisoformat(date_str)
+                    )
                     datasets[set_num].append(data)
                 set_num += 1
 
         years.append(year_3)
-        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_1), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
-        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_2), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
-        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_3), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
-
+        WeatherDataFactory.create(
+            station_id=station_id_1,
+            date=date.fromisoformat(date_1),
+            max_temp=MISSING_VALUE,
+            min_temp=MISSING_VALUE,
+            precipitation=MISSING_VALUE,
+        )
+        WeatherDataFactory.create(
+            station_id=station_id_1,
+            date=date.fromisoformat(date_2),
+            max_temp=MISSING_VALUE,
+            min_temp=MISSING_VALUE,
+            precipitation=MISSING_VALUE,
+        )
+        WeatherDataFactory.create(
+            station_id=station_id_1,
+            date=date.fromisoformat(date_3),
+            max_temp=MISSING_VALUE,
+            min_temp=MISSING_VALUE,
+            precipitation=MISSING_VALUE,
+        )
 
         calculate_stats(years)
-        
+
         for dataset in datasets:
             record = dataset[0]
             year = record.date.year
             station_id = record.station_id
-            avg_max_temp, avg_min_temp, total_precipitation = self._calculate_expected_stats(dataset, batch_size)
+            (
+                avg_max_temp,
+                avg_min_temp,
+                total_precipitation,
+            ) = self._calculate_expected_stats(dataset, batch_size)
             statistics = Statistics.objects.get(station_id=station_id, year=year)
             assert avg_max_temp == statistics.avg_max_temp
             assert avg_min_temp == statistics.avg_min_temp
@@ -91,9 +116,3 @@ class TestWeatherServices:
         avg_min_temp = total_min_temp / batch_size
 
         return avg_max_temp, avg_min_temp, total_precipitation
-
-        
-        
-        
-        
-        

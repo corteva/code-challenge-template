@@ -26,4 +26,3 @@ class StatisticsFactory(DjangoModelFactory):
     avg_max_temp = FuzzyFloat(low=0)
     avg_min_temp = FuzzyFloat(low=0)
     total_precipitation = FuzzyFloat(low=0)
-

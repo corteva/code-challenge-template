@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('weather', '0002_auto_20220905_1937'),
+        ("weather", "0002_auto_20220905_1937"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='weatherdata',
-            name='max_temp',
+            model_name="weatherdata",
+            name="max_temp",
             field=models.FloatField(),
         ),
         migrations.AlterField(
-            model_name='weatherdata',
-            name='min_temp',
+            model_name="weatherdata",
+            name="min_temp",
             field=models.FloatField(),
         ),
         migrations.AlterField(
-            model_name='weatherdata',
-            name='precipitation',
+            model_name="weatherdata",
+            name="precipitation",
             field=models.FloatField(),
         ),
     ]
