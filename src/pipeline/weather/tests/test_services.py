@@ -31,20 +31,34 @@ class TestWeatherServices:
         year_1 = 1999
         year_2 = 2000
         year_3 = 2001
-        years = [year_1, year_2, year_3]
-        date_1 = f"{year_1}-02-03"
+        years = [year_1, year_2]
+        date_1 = f"{year_1}-02-25"
         date_2 = f"{year_2}-10-10"
         date_3 = f"{year_3}-12-20"
         station_id_1 = "USC12345"
         station_id_2 = "USC67890"
-        
-        dataset_1 = WeatherDataFactory.create_batch(batch_size, station_id=station_id_1, date=date.fromisoformat(date_1))
-        dataset_2 = WeatherDataFactory.create_batch(batch_size, station_id=station_id_1, date=date.fromisoformat(date_2))
-        dataset_3 = WeatherDataFactory.create_batch(batch_size, station_id=station_id_2, date=date.fromisoformat(date_1))
-        dataset_4 = WeatherDataFactory.create_batch(batch_size, station_id=station_id_2, date=date.fromisoformat(date_2))
-        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_1), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
-        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_3), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
+        station_ids = [station_id_1, station_id_2]
+
+        dataset_1 = list()
+        dataset_2 = list()
+        dataset_3 = list()
+        dataset_4 = list()
         datasets = [dataset_1, dataset_2, dataset_3, dataset_4]
+        set_num = 0
+        for year in years:
+            for station_id in station_ids:
+                for i in range(1, batch_size + 1):
+                    date_str = f"{year}-01-0{i}"
+                    print(date_str)
+                    data = WeatherDataFactory.create(station_id=station_id, date=date.fromisoformat(date_str))
+                    datasets[set_num].append(data)
+                set_num += 1
+
+        years.append(year_3)
+        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_1), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
+        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_2), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
+        WeatherDataFactory.create(station_id=station_id_1, date=date.fromisoformat(date_3), max_temp=MISSING_VALUE, min_temp=MISSING_VALUE, precipitation=MISSING_VALUE)
+
 
         calculate_stats(years)
         
