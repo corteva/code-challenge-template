@@ -114,5 +114,8 @@ class TestWeatherServices:
 
         avg_max_temp = total_max_temp / batch_size
         avg_min_temp = total_min_temp / batch_size
+        rounded_avg_max_temp = round(avg_max_temp, 2)
+        rounded_avg_min_temp = round(avg_min_temp, 2)
+        rounded_total_precipitation = round(total_precipitation, 2)
 
-        return avg_max_temp, avg_min_temp, total_precipitation
+        return rounded_avg_max_temp, rounded_avg_min_temp, rounded_total_precipitation
