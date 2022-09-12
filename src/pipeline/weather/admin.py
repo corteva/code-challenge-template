@@ -22,7 +22,8 @@ class WeatherDataAdmin(ModelAdmin):
 
     def calculate_all_statistics(self, request, queryset):
         years = generate_years_list()
-        calculate_stats(years)
+        if years:
+            calculate_stats(years)
         return
 
     calculate_all_statistics.short_description = "Calculate All Statistics"

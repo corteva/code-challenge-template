@@ -5,6 +5,8 @@ from weather.models import WeatherData, Statistics
 
 
 def generate_years_list() -> list:
+    if WeatherData.objects.all().count() == 0:
+        return []
     min_date = WeatherData.objects.aggregate(Min("date"))
     max_date = WeatherData.objects.aggregate(Max("date"))
     start_year = min_date["date__min"].year
@@ -17,24 +19,26 @@ def generate_years_list() -> list:
 
 
 def calculate_stats(years: list) -> None:
-    # todo: note about freq of loads and analysis then maybe less DB queries
     usable_max_data = WeatherData.objects.exclude(max_temp=MISSING_VALUE)
     usable_min_data = WeatherData.objects.exclude(min_temp=MISSING_VALUE)
     usable_precip_data = WeatherData.objects.exclude(precipitation=MISSING_VALUE)
     station_ids = set(WeatherData.objects.values_list("station_id", flat=True))
-    for station_id in station_ids:
-        for year in years:
+    for year in years:
+        for station_id in station_ids:
             avg_max_temp = _calculate_avg_max_temp(usable_max_data, station_id, year)
             avg_min_temp = _calculate_avg_min_temp(usable_min_data, station_id, year)
             total_precipitation = _calculate_total_precip(
                 usable_precip_data, station_id, year
             )
-            Statistics.objects.create(
+            defaults = {
+                'avg_max_temp': avg_max_temp,
+                'avg_min_temp': avg_min_temp,
+                'total_precipitation': total_precipitation,
+            }
+            Statistics.objects.update_or_create(
                 station_id=station_id,
                 year=year,
-                avg_max_temp=avg_max_temp,
-                avg_min_temp=avg_min_temp,
-                total_precipitation=total_precipitation,
+                defaults=defaults
             )
 
 
