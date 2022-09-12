@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crop', '0002_add_timestamp_fields'),
+        ("crop", "0002_add_timestamp_fields"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='cropdata',
-            unique_together={('year',)},
+            name="cropdata",
+            unique_together={("year",)},
         ),
     ]

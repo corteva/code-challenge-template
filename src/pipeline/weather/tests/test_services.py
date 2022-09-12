@@ -93,15 +93,29 @@ class TestWeatherServices:
 
     def test_calculate_stats_upsert(self):
         year = 1999
-        years = [year, ]
+        years = [
+            year,
+        ]
         iso_date = f"{year}-02-25"
         station_id = "USC12345"
         max_temp = 20.1
         min_temp = 12.9
-        precipitation = .76
+        precipitation = 0.76
 
-        WeatherDataFactory.create(station_id=station_id, date=date.fromisoformat(iso_date), max_temp=max_temp, min_temp=min_temp, precipitation=precipitation)
-        StatisticsFactory.create(station_id=station_id, year=year, avg_max_temp=0, avg_min_temp=0, total_precipitation=0)
+        WeatherDataFactory.create(
+            station_id=station_id,
+            date=date.fromisoformat(iso_date),
+            max_temp=max_temp,
+            min_temp=min_temp,
+            precipitation=precipitation,
+        )
+        StatisticsFactory.create(
+            station_id=station_id,
+            year=year,
+            avg_max_temp=0,
+            avg_min_temp=0,
+            total_precipitation=0,
+        )
 
         calculate_stats(years)
 
@@ -116,7 +130,9 @@ class TestWeatherServices:
         years = [year, bad_year]
         iso_date = f"{year}-02-25"
         station_id = "USC12345"
-        WeatherDataFactory.create(station_id=station_id, date=date.fromisoformat(iso_date))
+        WeatherDataFactory.create(
+            station_id=station_id, date=date.fromisoformat(iso_date)
+        )
 
         calculate_stats(years)
 

@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crop', '0003_alter_cropdata_unique_together'),
+        ("crop", "0003_alter_cropdata_unique_together"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='cropdata',
+            name="cropdata",
             unique_together=set(),
         ),
         migrations.AlterField(
-            model_name='cropdata',
-            name='year',
+            model_name="cropdata",
+            name="year",
             field=models.PositiveSmallIntegerField(unique=True),
         ),
     ]

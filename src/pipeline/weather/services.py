@@ -31,14 +31,12 @@ def calculate_stats(years: list) -> None:
                 usable_precip_data, station_id, year
             )
             defaults = {
-                'avg_max_temp': avg_max_temp,
-                'avg_min_temp': avg_min_temp,
-                'total_precipitation': total_precipitation,
+                "avg_max_temp": avg_max_temp,
+                "avg_min_temp": avg_min_temp,
+                "total_precipitation": total_precipitation,
             }
             Statistics.objects.update_or_create(
-                station_id=station_id,
-                year=year,
-                defaults=defaults
+                station_id=station_id, year=year, defaults=defaults
             )
 
 

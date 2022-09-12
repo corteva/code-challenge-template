@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 
 from weather.services import generate_years_list, calculate_stats
 
+
 class Command(BaseCommand):
 
     help = "Transform phase of pipeline"
