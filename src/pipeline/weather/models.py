@@ -4,11 +4,11 @@ from core.models import BaseModel
 
 
 class WeatherData(BaseModel):
-    station_id = models.CharField(max_length=50)
-    date = models.DateField()
-    max_temp = models.FloatField()
-    min_temp = models.FloatField()
-    precipitation = models.FloatField()
+    station_id = models.CharField(max_length=50, help_text="Weather station identifier")
+    date = models.DateField(help_text="Date of data collection")
+    max_temp = models.FloatField(help_text="Highest temperature recorded for the day (measured in degrees Celsius)")
+    min_temp = models.FloatField(help_text="Lowest temperature recorded for the day (measured in degrees Celsius)")
+    precipitation = models.FloatField(help_text="Amount of precipitation recorded for the day (measured in centimeters)")
 
     class Meta:
         unique_together = [
@@ -21,8 +21,8 @@ class WeatherData(BaseModel):
 
 
 class Statistics(BaseModel):
-    station_id = models.CharField(max_length=50)
-    year = models.PositiveSmallIntegerField()
-    avg_max_temp = models.FloatField(null=True)
-    avg_min_temp = models.FloatField(null=True)
-    total_precipitation = models.FloatField(null=True)
+    station_id = models.CharField(max_length=50, help_text="Weather station identifier")
+    year = models.PositiveSmallIntegerField(help_text="Year that the statistics were calculated for")
+    avg_max_temp = models.FloatField(null=True, help_text="Average of the daily max temperatures recorded (measured in degrees Celsius)")
+    avg_min_temp = models.FloatField(null=True, help_text="Average of the daily min temperatures recorded (measured in degrees Celsius)")
+    total_precipitation = models.FloatField(null=True, help_text="Sum of the daily precipitation recorded (measured in centimeters)")

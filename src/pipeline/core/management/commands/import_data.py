@@ -93,7 +93,7 @@ class Command(BaseCommand):
         df["date"] = df["date"].apply(self._format_date)
         df["max_temp"] = df["max_temp"].apply(self._shift_decimal_by_one)
         df["min_temp"] = df["min_temp"].apply(self._shift_decimal_by_one)
-        df["precipitation"] = df["precipitation"].apply(self._shift_decimal_by_one)
+        df["precipitation"] = df["precipitation"].apply(self._shift_decimal_by_two)
         records = df.to_dict("records")
         objs = [WeatherData(**record) for record in records]
         WeatherData.objects.bulk_create(objs, ignore_conflicts=True)
@@ -112,6 +112,7 @@ class Command(BaseCommand):
         CropData.objects.bulk_create(objs, ignore_conflicts=True)
         curr_count = CropData.objects.all().count()
         self._update_counts(records, start_count, curr_count)
+
     def _format_date(self, date: str) -> str:
         date = str(date)
         year = date[:4]
@@ -121,7 +122,12 @@ class Command(BaseCommand):
         return formatted_date
 
     def _shift_decimal_by_one(self, num: float) -> float:
-        return self._shift_decimal(num, -1)
+        shifted_num = self._shift_decimal(num, -1)
+        return round(shifted_num, 1)
+
+    def _shift_decimal_by_two(self, num: float) -> float:
+        shifted_num = self._shift_decimal(num, -2)
+        return round(shifted_num, 2)
 
     def _shift_decimal(self, num: float, shift: int) -> float:
         if num == -9999.0:
