@@ -6,4 +6,4 @@ from crop.models import CropData
 class CropSerializer(serializers.ModelSerializer):
     class Meta:
         model = CropData
-        fields = ["year", "corn_yield", "created_ts", "updated_ts"]
+        fields = ["year", "corn_yield", "created_timestamp", "updated_timestamp"]

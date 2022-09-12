@@ -12,8 +12,8 @@ class WeatherDataSerializer(serializers.ModelSerializer):
             "max_temp",
             "min_temp",
             "precipitation",
-            "created_ts",
-            "updated_ts",
+            "created_timestamp",
+            "updated_timestamp",
         ]
 
 
@@ -26,6 +26,6 @@ class StatisticsSerializer(serializers.ModelSerializer):
             "avg_max_temp",
             "avg_min_temp",
             "total_precipitation",
-            "created_ts",
-            "updated_ts",
+            "created_timestamp",
+            "updated_timestamp",
         ]
