@@ -14,9 +14,6 @@ class WeatherData(BaseModel):
         unique_together = [
             "station_id",
             "date",
-            "max_temp",
-            "min_temp",
-            "precipitation",
         ]
 
 
@@ -26,3 +23,9 @@ class Statistics(BaseModel):
     avg_max_temp = models.FloatField(null=True, help_text="Average of the daily max temperatures recorded (measured in degrees Celsius)")
     avg_min_temp = models.FloatField(null=True, help_text="Average of the daily min temperatures recorded (measured in degrees Celsius)")
     total_precipitation = models.FloatField(null=True, help_text="Sum of the daily precipitation recorded (measured in centimeters)")
+
+    class Meta:
+        unique_together = [
+            "station_id",
+            "year",
+        ]

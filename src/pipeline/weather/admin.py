@@ -16,6 +16,16 @@ class WeatherDataAdmin(ModelAdmin):
         "precipitation",
     ]
     ordering = ["station_id", "date"]  # todo: apply ordering to apis
+    actions = [
+        "calculate_all_statistics",
+    ]
+
+    def calculate_all_statistics(self, request, queryset):
+        years = generate_years_list()
+        calculate_stats(years)
+        return
+
+    calculate_all_statistics.short_description = "Calculate All Statistics"
 
 
 @register(Statistics)
@@ -28,15 +38,3 @@ class StatisticsAdmin(ModelAdmin):
         "total_precipitation",
     ]
     ordering = ["station_id", "year"]
-    actions = [
-        "calculate_all_statistics",
-    ]
-
-    def calculate_all_statistics(self, request, queryset):
-        years = generate_years_list()
-        calculate_stats(years)
-        return
-
-    calculate_all_statistics.short_description = (
-        "Calculate All Statistics (no obj needed)"
-    )
