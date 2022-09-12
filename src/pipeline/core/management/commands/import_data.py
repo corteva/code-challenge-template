@@ -94,6 +94,9 @@ class Command(BaseCommand):
         self._update_counts(records, start_count, curr_count)
 
     def load_yield_data(self, file_path):
+        """
+        CropData will have the corn_yield updated if there is already an existing record for that year.
+        """
         start_count = CropData.objects.all().count()
         df = pd.read_table(
             file_path,
@@ -102,7 +105,16 @@ class Command(BaseCommand):
         )
         records = df.to_dict("records")
         objs = [CropData(**record) for record in records]
-        CropData.objects.bulk_create(objs, ignore_conflicts=True)
+        returned_objs = CropData.objects.bulk_update_or_create(
+            objs, ["corn_yield"], match_field="year", yield_objects=True
+        )
+
+        # returned_objs is a generator with the structure: ([created], [updated])
+        returned_objs = list(returned_objs)
+        updated_objs = returned_objs[0][1]
+        # Lower starting count so that updated records will be included in success count. Even if a record has not
+        # changed an update will be performed and that will be considered a successful upsert.
+        start_count -= len(updated_objs)
         curr_count = CropData.objects.all().count()
         self._update_counts(records, start_count, curr_count)
 

@@ -1,6 +1,7 @@
 black==22.8.0
 datetime==4.6
 django==3.2
+django-bulk-update-or-create==0.3.0
 django-filter==22.1
 djangorestframework==3.13.1
 factory-boy==3.2.1
