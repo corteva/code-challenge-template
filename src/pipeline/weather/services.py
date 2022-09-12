@@ -5,6 +5,10 @@ from weather.models import WeatherData, Statistics
 
 
 def generate_years_list() -> list:
+    """
+    If there are any WeatherData objects, then a list of all years between and including the oldest and most recent
+    years is generated and returned.
+    """
     if WeatherData.objects.all().count() == 0:
         return []
     min_date = WeatherData.objects.aggregate(Min("date"))
@@ -19,6 +23,12 @@ def generate_years_list() -> list:
 
 
 def calculate_stats(years: list) -> None:
+    """
+    This is the function to be used when performing analysis of WeatherData objects. Call generate_years_list first if
+    analysis of all WeatherData objects is desired. For every year and every station_id, the avg_max_temp, avg_min_temp,
+    and total_precipitation is calculated and then updates or creates a Statistics object.
+
+    """
     usable_max_data = WeatherData.objects.exclude(max_temp=MISSING_VALUE)
     usable_min_data = WeatherData.objects.exclude(min_temp=MISSING_VALUE)
     usable_precip_data = WeatherData.objects.exclude(precipitation=MISSING_VALUE)

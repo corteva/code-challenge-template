@@ -4,7 +4,7 @@ from crop.models import CropData
 
 
 class CropFilter(FilterSet):
-    year = CharFilter(field_name="year", lookup_expr="iexact")  # todo: Number filter?
+    year = CharFilter(field_name="year", lookup_expr="iexact")
 
     class Meta:
         model = CropData

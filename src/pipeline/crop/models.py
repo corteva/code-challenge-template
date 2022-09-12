@@ -4,6 +4,10 @@ from core.models import BaseModel
 
 
 class CropData(BaseModel):
+    """
+    CropData model is used to store crop yield data in the United States by year
+    """
+
     year = models.PositiveSmallIntegerField(
         unique=True, help_text="Year of the harvest"
     )

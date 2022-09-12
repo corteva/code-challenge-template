@@ -6,7 +6,15 @@ from weather.models import WeatherData, Statistics
 class WeatherDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = WeatherData
-        fields = ["station_id", "date", "max_temp", "min_temp", "precipitation"]
+        fields = [
+            "station_id",
+            "date",
+            "max_temp",
+            "min_temp",
+            "precipitation",
+            "created_ts",
+            "updated_ts",
+        ]
 
 
 class StatisticsSerializer(serializers.ModelSerializer):
@@ -18,4 +26,6 @@ class StatisticsSerializer(serializers.ModelSerializer):
             "avg_max_temp",
             "avg_min_temp",
             "total_precipitation",
+            "created_ts",
+            "updated_ts",
         ]

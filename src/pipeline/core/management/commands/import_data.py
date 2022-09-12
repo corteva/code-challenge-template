@@ -33,12 +33,6 @@ class Command(BaseCommand):
             action="store_true",
             help="Load yield data from the txt files in the yld_data folder",
         )
-        parser.add_argument(  # todo: this needs to be deleted
-            "-d",
-            "--delete",
-            action="store_true",
-            help="Clear db",
-        )
 
     def handle(self, *args, **kwargs):
         path = "../../{}/"
@@ -51,11 +45,6 @@ class Command(BaseCommand):
             start_msg = f"Starting ingestion of yield data from the txt files in the yld_data folder at {start_time}."
             path = path.format("yld_data")
             self._read_txt_files(path, YIELD, start_msg)
-        elif kwargs.get("delete", False):
-            WeatherData.objects.all().delete()
-            print(WeatherData.objects.all().count())
-            CropData.objects.all().delete()
-            print(CropData.objects.all().count())
         else:
             self.stdout.write(
                 self.style.ERROR(
@@ -83,6 +72,10 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(end_msg))
 
     def load_weather_data(self, file_path, file_name):
+        """
+        Pandas dataframes had the quickest performance time in combination with the bulk_create method provided by the
+        Django ORM since it combines many creates into 1 underlying sql statement.
+        """
         start_count = WeatherData.objects.all().count()
         df = pd.read_table(
             file_path,
@@ -114,6 +107,12 @@ class Command(BaseCommand):
         self._update_counts(records, start_count, curr_count)
 
     def _format_date(self, date: str) -> str:
+        """
+        Reformats a date from the txt file formatted as YYYYMMDD to a Django compatible format YYYY-MM-DD.
+        Example:
+            date = 20220910
+            returns 2022-09-10
+        """
         date = str(date)
         year = date[:4]
         month = date[4:6]
@@ -130,6 +129,13 @@ class Command(BaseCommand):
         return round(shifted_num, 2)
 
     def _shift_decimal(self, num: float, shift: int) -> float:
+        """
+        Will move the decimal in 'num' to the right or left by 'shift' places.
+        The shift will only be done if the number is not the float representation of a MISSING_VALUE
+        Example:
+            num = 31.4, shift = -1
+            returns 3.14
+        """
         if num == -9999.0:
             return num
         shifted_num = num * 10.0**shift

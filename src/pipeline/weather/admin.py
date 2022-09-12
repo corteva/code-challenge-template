@@ -1,7 +1,5 @@
 from django.contrib.admin import register, ModelAdmin
 
-from core.admin import NoObjNeededMixin
-
 from weather.models import WeatherData, Statistics
 from weather.services import generate_years_list, calculate_stats
 
@@ -15,6 +13,7 @@ class WeatherDataAdmin(ModelAdmin):
         "min_temp",
         "precipitation",
     ]
+    list_filter = ["station_id", "date"]
     ordering = ["station_id", "date"]  # todo: apply ordering to apis
     actions = [
         "calculate_all_statistics",
@@ -38,4 +37,5 @@ class StatisticsAdmin(ModelAdmin):
         "avg_min_temp",
         "total_precipitation",
     ]
+    list_filter = ["station_id", "year"]
     ordering = ["station_id", "year"]
