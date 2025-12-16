@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      SNOWFLAKE_DATABASE: WEATHER_DB
+    restart: unless-stopped
+
+  ingestion:
+    build: ./ingestion
+    env_file:
+      - .env
+    environment:
+      SNOWFLAKE_DATABASE: WEATHER_DB
+      SNOWFLAKE_SCHEMA: RAW
+      WX_DATA_PATH: /app/data/wx_data
+    volumes:
+      - ./wx_data:/app/data/wx_data
+    command: ["python", "ingest_weather.py"]

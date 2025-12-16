@@ -1,0 +1,4 @@
+Flask
+flasgger
+snowflake-connector-python
+python-dotenv
