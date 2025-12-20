@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: raw
+    database: WEATHER_DB
+    schema: RAW
+    tables:
+      - name: WEATHER_DAILY_RAW
+
+models:
+  - name: stg_weather_daily
+    description: "Cleaned daily weather data with proper units."
+    columns:
+      - name: STATION_ID
+      - name: DATE_KEY
+      - name: YEAR
+      - name: MAX_TEMP_C
+      - name: MIN_TEMP_C
+      - name: PRECIP_MM

@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: fct_weather_yearly_stats
+    description: "Yearly aggregated weather metrics per station."
+    columns:
+      - name: STATION_ID
+      - name: YEAR
+      - name: AVG_MAX_TEMP_C
+      - name: AVG_MIN_TEMP_C
+      - name: TOTAL_PRECIP_CM
